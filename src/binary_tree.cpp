@@ -19,9 +19,9 @@ struct BTNode
     BTNode* right  = NULL;
 };
 
-BinaryTree* construct         (BinaryTree* tree);
-void        destroy           (BinaryTree* tree);
-bool        deleteNode        (BTNode* node, va_list args);
+BinaryTree* construct  (BinaryTree* tree);
+void        destroy    (BinaryTree* tree);
+bool        deleteNode (BTNode* node, va_list args);
 
 bool preOrderTraverse  (BTNode* subRoot, bool (*function)(BTNode* node, va_list args), va_list args);
 bool inOrderTraverse   (BTNode* subRoot, bool (*function)(BTNode* node, va_list args), va_list args);
@@ -98,8 +98,8 @@ bool deleteNode(BTNode* node, va_list args)
 }
 
 #define TRAVERSE_SUBTREE(traverse, side) if (traverse(subRoot->side, function, args)  == !BT_TRAVERSE_RUN) \
-                                         {                                                                            \
-                                             return !BT_TRAVERSE_RUN;                                                 \
+                                         {                                                                 \
+                                             return !BT_TRAVERSE_RUN;                                      \
                                          }
 
 void preOrderTraverse(BTNode* subRoot, bool (*function)(BTNode* node, va_list args), ...)

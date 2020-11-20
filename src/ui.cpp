@@ -19,7 +19,6 @@ struct UI_Speaker
 
 const size_t NOT_DELIM_SYMBOL_DELAY = 55;
 const size_t DELIM_SYMBOL_DELAY     = 320;
-const char*  PUNCTUATION_MARKS      = ",.!?";
 
 size_t numOfOccurences(const char* str, char ch);
 
@@ -367,7 +366,7 @@ void UI_VSay(UI_Speaker* speaker, const char* format, va_list args)
 
         if (!currDelims)
         {
-            puncMarks  = numOfOccurences(currStart, PUNCTUATION_MARKS);
+            puncMarks  = numOfOccurences(currStart, UI_PUNCTUATION_MARKS);
             currLength = currEnd - currStart;
 
             txSleep((NOT_DELIM_SYMBOL_DELAY * (currLength - puncMarks) + DELIM_SYMBOL_DELAY * puncMarks) / UI_GetSpeed(speaker));

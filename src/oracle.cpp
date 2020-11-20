@@ -248,9 +248,9 @@ void printCurrentLine(Text* text)
 
     size_t currLineNumber = getCurrentLineNumber(text);
     LG_Write("line %u\n%5u | %s\n", LG_STYLE_CLASS_ERROR, 
-                currLineNumber + 1, 
-                currLineNumber + 1, 
-                getLine(text, currLineNumber));
+             currLineNumber + 1, 
+             currLineNumber + 1, 
+             getLine(text, currLineNumber));
 }
 
 void game(Oracle* oracle)
@@ -320,17 +320,38 @@ void defeat(Oracle* oracle, BTNode* node)
         return;
     }
 
+    char* newQuestion = UI_AskStr(getSpeaker(oracle), MAX_STRING_LENGTH, "\n  -How %s differs from %s? ", newObject, getValue(node));
+
+    char* questionStart  = newQuestion;
+    char* notStart       = strstr(newQuestion, "not");
+    int   notLength      = strlen("not");
+    int   questionLength = strlen(newQuestion);
+    if (notStart != NULL)
+    {
+        int symbolsCountBeforeNot = strspn(newQuestion, " \t");
+        int symbolsCountAfterNot  = strspn(notStart + notLength, " \t");
+
+        // check if 'not' is the first word in the question 
+        if (symbolsCountBeforeNot == notStart - newQuestion) 
+        { 
+            questionStart = notStart + notLength + symbolsCountAfterNot;
+
+            if (questionStart >= newQuestion + questionLength) { questionStart = newQuestion; }
+        }
+    }
+
+    bool isNot = questionStart != newQuestion;
+
     BTNode* newNode1 = newNode(getValue(node));
     BTNode* newNode2 = newNode(newObject);
 
     setParent(newNode1, node);
     setParent(newNode2, node);
 
-    setLeft(node, newNode1);
-    setRight(node, newNode2);
+    setLeft(node, !isNot ? newNode1 : newNode2);
+    setRight(node, !isNot ? newNode2 : newNode1);
 
-    char* newQuestion = UI_AskStr(getSpeaker(oracle), MAX_STRING_LENGTH, "\n  -How %s differs from %s? ", newObject, getValue(node));
-    setValue(node, newQuestion);  
+    setValue(node, questionStart);  
 
     UI_Say(oracle->speaker, "\n  -From now on you won't be able to outplay me!\n");  
 
@@ -478,13 +499,13 @@ void comparison(Oracle* oracle, BTNode* object1, BTNode* object2)
     if (currNode != getRoot(oracle->tree))
     {
         definition(oracle, object1, currNode);
-        UI_Say(oracle->speaker, " and\n  ");
+        UI_Say(oracle->speaker, " and\n   ");
         definition(oracle, object2, currNode);
     }
     else
     {
         definition(oracle, object1, NULL);
-        UI_Say(oracle->speaker, " and\n  ");
+        UI_Say(oracle->speaker, " and\n   ");
         definition(oracle, object2, NULL);
     }
 

@@ -5,6 +5,8 @@
 
 struct UI_Speaker;
 
+static const char* UI_PUNCTUATION_MARKS = ",.!?";
+
 void UI_PrintDivider  (size_t length, char divider);
 void UI_PrintCentered (size_t length, const char* str);
 
