@@ -3,6 +3,7 @@
 //! Sergey
 //!  - for making the my easier by offering me to go and fuck myself
 //!  - for team-brainstorming how to use tts the best way possible (hopefully)
+//!  - for reminding me to process "not"
 //!
 //! Vasily
 //!  - for helping to set up the ms speech api
